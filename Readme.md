@@ -13,8 +13,9 @@ If you only want the images to be displayed in the window that opens, it is suff
 popup({
     img : {
         src : 'img/popup.jpg',
-        alt : 'alt',
-        url : '#'
+        alt : 'description',
+        url : '#',
+        target : '_blank'
     }
 })
 ```

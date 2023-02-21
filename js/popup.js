@@ -1,6 +1,5 @@
 let popup = ({
     img,
-    head,
     text
 }) => {
 
@@ -28,6 +27,7 @@ let popup = ({
                 let popupRedirect = document.createElement('a')
                     popupRedirect.setAttribute('href', img.url)
                     popupRedirect.setAttribute('alt', img.alt !== undefined ? img.alt : '')
+                    popupRedirect.setAttribute('target', img.target !== undefined ? img.target : '')
 
                     popupRedirect.append(popupImg)
                     popupMain.append(closeButton,popupRedirect)
