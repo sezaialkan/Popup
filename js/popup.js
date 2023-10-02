@@ -1,69 +1,67 @@
-let popup = ({
-    img,
-    text
-}) => {
+let popup = ({ img, text }) => {
+  const random = Math.floor(Math.random() * 100);
 
-    let closeButton = document.createElement('button')
-        closeButton.classList.add('close')
-        closeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="120" width="120" stroke-width="1" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><g><path d="M7 7L17 17M7 17L17 7"></path></g></svg>`
+  let closeButton = document.createElement("button");
+  closeButton.classList.add("close");
+  closeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="120" width="120" stroke-width="1" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><g><path d="M7 7L17 17M7 17L17 7"></path></g></svg>`;
 
-    let popupBlock = document.createElement('div')
-        popupBlock.classList.add('popup')
+  let popupBlock = document.createElement("div");
+  popupBlock.classList.add("popup");
 
-    let popupMain = document.createElement('div')
-        popupMain.classList.add('main')
+  let popupMain = document.createElement("div");
+  popupMain.classList.add("main");
+  popupMain.classList.add("main-" + random);
 
-        if(img !== undefined){
+  if (img !== undefined) {
+    popupMain.classList.add("img-view");
 
-            popupMain.classList.add('img-view')
+    let popupImg = document.createElement("img");
+    popupImg.classList.add("popup-img");
+    popupImg.setAttribute("src", img.src);
+    popupImg.setAttribute("alt", img.alt !== undefined ? img.alt : "");
 
-            let popupImg = document.createElement('img')
-                popupImg.classList.add('popup-img')
-                popupImg.setAttribute('src', img.src)
-                popupImg.setAttribute('alt', img.alt !== undefined ? img.alt : '')
+    if (img.url !== undefined) {
+      let popupRedirect = document.createElement("a");
+      popupRedirect.setAttribute("href", img.url);
+      popupRedirect.setAttribute("alt", img.alt !== undefined ? img.alt : "");
+      popupRedirect.setAttribute(
+        "target",
+        img.target !== undefined ? img.target : ""
+      );
 
-            if(img.url !== undefined){
-                
-                let popupRedirect = document.createElement('a')
-                    popupRedirect.setAttribute('href', img.url)
-                    popupRedirect.setAttribute('alt', img.alt !== undefined ? img.alt : '')
-                    popupRedirect.setAttribute('target', img.target !== undefined ? img.target : '')
+      popupRedirect.append(popupImg);
+      popupMain.append(closeButton, popupRedirect);
+    } else {
+      popupMain.append(closeButton, popupImg);
+    }
+  } else {
+    let popupDetail = document.createElement("div");
+    popupDetail.classList.add("detail");
+    popupDetail.innerHTML = text.body;
 
-                    popupRedirect.append(popupImg)
-                    popupMain.append(closeButton,popupRedirect)
+    let popupHead = document.createElement("h2");
+    popupHead.innerHTML = text.head;
 
-            }else{
-                popupMain.append(closeButton,popupImg)
-            }  
+    popupMain.append(closeButton, popupHead, popupDetail);
+  }
 
-            
+  closeButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    popupBlock.classList.add("remove");
 
-        }else{
+    setTimeout(() => {
+      popupBlock.remove();
+    }, 500);
+  });
 
-            let popupDetail = document.createElement('div')
-                popupDetail.classList.add('detail')
-                popupDetail.innerHTML = text.body
+  popupBlock.appendChild(popupMain);
 
-            let popupHead = document.createElement('h2')
-                popupHead.innerHTML = text.head    
+  document.body.appendChild(popupBlock);
 
-                popupMain.append(closeButton,popupHead,popupDetail)
-
-        }
-
-    closeButton.addEventListener('click', (event) => {
-        event.preventDefault()
-        popupBlock.classList.add('remove')
-
-        setTimeout(() => {
-            popupBlock.remove()
-        }, 500);
-    })    
-       
-
-
-    popupBlock.appendChild(popupMain)
-    
-   document.body.appendChild(popupBlock)
-
-}
+  document.addEventListener("click", function (event) {
+    var targetElement = event.target;
+    if (!targetElement.closest(".main-" + random)) {
+      closeButton.click();
+    }
+  });
+};
